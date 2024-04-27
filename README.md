@@ -26,7 +26,7 @@ git@github.com:erges699/marigostraru-202404.git
 $ python3.9 -m venv venv
 $ . venv/bin/activate
 $ python3 -m pip install --upgrade pip
-$ pip install -r ./backend/foodgram/requirements.txt
+$ pip install -r requirements.txt
 ```
 
 <h3 align="left">Об авторе:</h3>
