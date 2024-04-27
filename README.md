@@ -14,7 +14,7 @@
 
 <h3 align="left">Установка:</h3>
 
-К### Клонировать репозиторий и перейти в него:
+### Клонировать репозиторий и перейти в него:
 
 ```
 git@github.com:erges699/marigostraru-202404.git
@@ -27,6 +27,7 @@ $ python3.9 -m venv venv
 $ . venv/bin/activate
 $ python3 -m pip install --upgrade pip
 $ pip install -r ./backend/foodgram/requirements.txt
+```
 
 <h3 align="left">Об авторе:</h3>
 <a href="https://github.com/erges699" target="_blank">Сергей Баляба</a>
