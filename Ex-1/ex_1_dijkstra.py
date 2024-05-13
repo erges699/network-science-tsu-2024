@@ -1,159 +1,97 @@
 '''
-Требуется написать скрипт на языке Python с реализацией алгоритма Дейкстры для заданного графа. 
-Граф задаётся матрицей смежности или списком смежных вершин. Алгоритм должен находить кратчайшие 
-пути от произвольной начальной вершины до всех остальных. Для представления графов разрешается 
-использовать сторонние библиотеки, но не разрешается использовать реализацию алгоритма Дейкстры 
-в составе сторонних библиотек.
+Требуется написать скрипт на языке Python с реализацией алгоритма Дейкстры
+для заданного графа. Граф задаётся матрицей смежности или списком смежных
+вершин. Алгоритм должен находить кратчайшие пути от произвольной начальной
+вершины до всех остальных. Для представления графов разрешается
+использовать сторонние библиотеки, но не разрешается использовать реализацию
+алгоритма Дейкстры в составе сторонних библиотек.
 '''
+import sys
+
 
 class Graph(object):
     def __init__(self, nodes, init_graph):
         self.nodes = nodes
-        self.graph = self.construct_graph(nodes, init_graph)
+        self.graph = self.make_graph(nodes, init_graph)
 
-    def construct_graph(self, nodes, init_graph):
-        '''
-        Этот метод обеспечивает симметричность графика. Другими словами, если существует путь от узла A к B со значением V, должен быть путь от узла B к узлу A со значением V.
-        '''
+    def make_graph(self, nodes, init_graph):
         graph = {}
         for node in nodes:
             graph[node] = {}
-
         graph.update(init_graph)
-
         for node, edges in graph.items():
-            for adjacent_node, value in edges.items():
-                if graph[adjacent_node].get(node, False) == False:
-                    graph[adjacent_node][node] = value
-
+            for neighbour_node, value in edges.items():
+                if graph[neighbour_node].get(node, False) is False:
+                    graph[neighbour_node][node] = value
         return graph
 
     def get_nodes(self):
-        "Возвращает узлы графа"
         return self.nodes
 
-    def get_outgoing_edges(self, node):
-        "Возвращает соседей узла"
-        connections = []
-        for out_node in self.nodes:
-            if self.graph[node].get(out_node, False) != False:
-                connections.append(out_node)
-        return connections
+    def get_outbound_edges(self, node):
+        relationship = []
+        for outbound_node in self.nodes:
+            if self.graph[node].get(outbound_node, False) is not False:
+                relationship.append(outbound_node)
+        return relationship
 
     def value(self, node1, node2):
-        "Возвращает значение ребра между двумя узлами."
         return self.graph[node1][node2]
 
-#Тестовый граф из рувики https://ru.wikipedia.org/wiki/Алгоритм_Дейкстры
+
+def dijkstra_algorithm(graph, start_node):
+    unvisited_nodes = list(graph.get_nodes())
+    s_path = {}
+    previous_nodes = {}
+    max_value = sys.maxsize
+    for node in unvisited_nodes:
+        s_path[node] = max_value
+    s_path[start_node] = 0
+
+    while unvisited_nodes:
+        cur_min_node = None
+        for node in unvisited_nodes:
+            if cur_min_node is None:
+                cur_min_node = node
+            elif s_path[node] < s_path[cur_min_node]:
+                cur_min_node = node
+        neighbors = graph.get_outbound_edges(cur_min_node)
+        for n in neighbors:
+            temp_value = s_path[cur_min_node] + graph.value(cur_min_node, n)
+            if temp_value < s_path[n]:
+                s_path[n] = temp_value
+                previous_nodes[n] = cur_min_node
+        unvisited_nodes.remove(cur_min_node)
+    return previous_nodes, s_path
+
+
+def print_result(previous_nodes, s_path, start_node, target_node):
+    path = []
+    node = target_node
+    while node != start_node:
+        path.append(node)
+        node = previous_nodes[node]
+    path.append(start_node)
+    print(f'Найден лучший маршрут с ценностью {s_path[target_node]}')
+    print(
+        'Кратчайший путь от начальной до конечной вершины: ',
+        ' -> '.join([str(item) for item in reversed(path)])
+    )
+
+
+'''
+Тестовый граф из рувики https://ru.wikipedia.org/wiki/Алгоритм_Дейкстры
+'''
+nodes = [1, 2, 3, 4, 5, 6]
 init_graph = {
-  1: {2:7, 3:9, 6:14},
-  2: {4:15, 3:10, 1:7},
-  4: {5:6, 3:11, 2:15},
-  5: {6:9, 4:6},
-  6: {1:14, 3:2, 5:9},
-  3: {4:11, 6:2, 1:9, 2:10}
+  1: {2: 7, 3: 9, 6: 14},
+  2: {4: 15, 3: 10, 1: 7},
+  4: {5: 6, 3: 11, 2: 15},
+  5: {6: 9, 4: 6},
+  6: {1: 14, 3: 2, 5: 9},
+  3: {4: 11, 6: 2, 1: 9, 2: 10}
 }
 
-
-print('\n  Граф G')
-for i in G:
-    print(i, ':', init_graph[i])
-
-nodes_amount = len(init_graph) #количество элементов в словаре (G)
-
-nodes_visited = [] #список посещённых вершин
-open_node = {} #словарь {открытая вершина : её метка}
-shortest_path = {} #словарь для отслеживания короткого пути
-current_node = None #текущая вершина
-end_node = None #конечная вершина
-
-def dijkstra(v, p, t, b, e):
-    print('\n  Обходим всех соседей текущей вершины')
-    for x in G[v]: #для каждого соседа (х) текущей вершины (v)
-        xm = p[v] + G[v][x] #новая метка соседа (xm) =
-                            #метка текущей вершины (p[v]) +
-                            #значение ребра vx (G[v][x])
-                            
-        if not x in p: #если соседа (x) нет в словаре (p)
-            p[x] = xm #записываем новую метку (xm) в словарь с ключем (x)
-            b[x] = v  #как только метка пересчитывается, запоминаем 
-                      #(следующая вершина: предыдущая вершина) в словаре (b)
-        elif not x in t: #иначе если (x) не в (t)
-            if p[x] > xm: #если старая метка соседа больше новой метки
-                p[x] = xm #новую метку записываем на место старой
-                b[x] = v #как только метка пересчитывается, запоминаем 
-                         #(следующая вершина: предыдущая вершина) в словаре (b)
-            
-        print('текущей вершины v =', v, ' сосед x =', x, 'c меткой xm =', xm)
-    
-    print('p =', p)
-    
-    print('\n  Добавляем текущую вершину в список посещенных')
-    t.append(v)            
-    print('t =', t) 
-    
-    if N <= len(t): # Условие выхода из функции
-        print('\nВсё!\nВершины и их метки =', p)
-        print('Словарь для отслеживания пути =', b)
-        
-        s = [] #кратчайший путь
-        s.insert(0, e) #вставляем (е) в список (s) по индексу (0)
-        
-        while True:
-            if b[e] == -1: #значение ключа (-1) имеет начальная вершина
-                           #вот её и ищем в словаре (b)
-                print('Кратчайший путь от начальной до конечной вершины =', s)
-                break #выходим из цикла
-            e = b[e] #теперь последней вершиной будет предыдущая
-            s.insert(0, e) #вставляем (е) в список (s) по индексу (0)
-                 
-        return  s         
-    
-    print('\n  Находим вершину с минимальной меткой за исключением тех, что уже в t')
-    for d in p: #вершина (d) с минимальной меткой из словаря (p)
-        if d not in t:
-            dm = p[d] #метка вершины (d)
-            break #пусть это будет первая вершина из словаря (p)
-    
-    for y in p: #для каждой вершины (y) из словаря (p)
-        if p[y] < dm and not y in t: #если метка вершины (y) <
-                                     #метки вершины (d) & (y) нет в (t)
-            dm = p[y] #метку вершины (y) записываем в (dm)
-            d = y #вершину (y) записываем в (d)
-            print('Вершина y =', y, 'с меткой dm =', dm)
-    
-    print('Вершина d =', d, 'имеет минимальную метку dm =', dm, \
-          '\nтеперь текущей вершиной v будет вершина d')
-    v = d #теперь текущей вершиной v будет вершина d
-    
-    print('\n  Рекурсивно вызываем функцию Дейкстры с параметрами v, p, t, b, e')
-    dijkstra(v, p, t, b, e)
-
-########## 
-'''
-# 2-й способ изменения глобальной переменной:
-# объявляем необходимые переменные как global
-def start_v(start, end):
-    global v, p, b, e
-    v = start
-    e = end
-    p[v] = 0
-    b[v] = -1
-    print('\n  Начальная текущая вершина v =', v)
-start_v(1, 5)
-'''
-  
-# 1-й способ изменения глобальной переменой:
-# используем возвращаемые значения
-def start_v(start, end):
-    v = start
-    e = end
-    p[v] = 0
-    b[v] = -1
-    print('\n  Начальная текущая вершина v =', v)
-    return v, p, b, e
-    
-v, p, b, e = start_v(1, 5)  # иницилизация начальной и конечной вершин
-dijkstra(v, p, t, b, e)     # вызываем функцию Дейкстры
-
-input()
+graph = Graph(nodes, init_graph)
+previous_nodes, s_path = dijkstra_algorithm(graph=graph, start_node=1)
+print_result(previous_nodes, s_path, start_node=1, target_node=5)
