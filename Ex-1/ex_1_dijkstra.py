@@ -72,26 +72,30 @@ def print_result(previous_nodes, s_path, start_node, target_node):
         path.append(node)
         node = previous_nodes[node]
     path.append(start_node)
-    print(f'Найден лучший маршрут с ценностью {s_path[target_node]}')
     print(
-        'Кратчайший путь от начальной до конечной вершины: ',
+        f'Кратчайший путь от {start_node} до {target_node}:',
         ' -> '.join([str(item) for item in reversed(path)])
     )
+    print(f'Cтоимость маршрута: {s_path[target_node]}')
 
 
-'''
-Тестовый граф из рувики https://ru.wikipedia.org/wiki/Алгоритм_Дейкстры
-'''
-nodes = [1, 2, 3, 4, 5, 6]
-init_graph = {
-  1: {2: 7, 3: 9, 6: 14},
-  2: {4: 15, 3: 10, 1: 7},
-  4: {5: 6, 3: 11, 2: 15},
-  5: {6: 9, 4: 6},
-  6: {1: 14, 3: 2, 5: 9},
-  3: {4: 11, 6: 2, 1: 9, 2: 10}
-}
+if __name__ == '__main__':
+    '''
+    Тестовый граф из рувики https://ru.ruwiki.ru/wiki/Алгоритм_Дейкстры
+    '''
+    nodes = [1, 2, 3, 4, 5, 6]
+    init_graph = {
+        1: {2: 7, 3: 9, 6: 14}, 
+        2: {4: 15, 3: 10, 1: 7}, 
+        3: {4: 11, 6: 2, 1: 9, 2: 10}, 
+        4: {5: 6, 3: 11, 2: 15},
+        5: {6: 9, 4: 6},
+        6: {1: 14, 3: 2, 5: 9}
+    }
 
-graph = Graph(nodes, init_graph)
-previous_nodes, s_path = dijkstra_algorithm(graph=graph, start_node=1)
-print_result(previous_nodes, s_path, start_node=1, target_node=5)
+    graph = Graph(nodes, init_graph)
+    start_node = 1
+    previous_nodes, s_path = dijkstra_algorithm(graph=graph, start_node=start_node)
+    for node in nodes:
+        if node != start_node:
+            print_result(previous_nodes, s_path, start_node=start_node, target_node=node)
