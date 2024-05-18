@@ -10,6 +10,7 @@
 '''
 import networkx as nx
 
+
 number_of_nodes = 5
 random_edge_percent = 0.5
 
@@ -18,4 +19,6 @@ a = 0
 for n in G.nodes():
     a = a + G.degree(n)
 print(f'Cредняя степень вершины: {float(a) / len(G.nodes())}')
-print(f'Cредняя степень вершины по формуле из материала лекций: {(number_of_nodes - 1) * random_edge_percent}')
+print(
+    f'Cредняя степень вершины по формуле из материала лекций: '
+    f'{(number_of_nodes - 1) * random_edge_percent}')
