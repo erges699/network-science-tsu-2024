@@ -95,7 +95,14 @@ if __name__ == '__main__':
 
     graph = Graph(nodes, init_graph)
     start_node = 1
-    previous_nodes, s_path = dijkstra_algorithm(graph=graph, start_node=start_node)
+    previous_nodes, s_path = dijkstra_algorithm(
+        graph=graph, start_node=start_node
+        )
     for node in nodes:
         if node != start_node:
-            print_result(previous_nodes, s_path, start_node=start_node, target_node=node)
+            print_result(
+                previous_nodes,
+                s_path,
+                start_node=start_node,
+                target_node=node
+            )
