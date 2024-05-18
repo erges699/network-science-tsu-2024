@@ -5,7 +5,7 @@
 Использованы следующие технологии и пакеты:
 <p align="left"> 
 <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"> </a>
-<a href="https://networkx.org" target="_blank" rel="noreferrer"> <img src="https://networkx.org/_static/networkx_logo.svg" alt="python" width="40" height="40"> </a>
+<a href="https://networkx.org" target="_blank" rel="noreferrer"> <img src="https://networkx.org/_static/networkx_logo.svg" alt="python" width="40" height="80"> </a>
 </p>
 
 <h3 align="left">Задания для лабораторных работ:</h3>
