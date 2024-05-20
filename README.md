@@ -39,7 +39,7 @@ ex_3_erdos_renyi.py
 ### Клонировать репозиторий и перейти в него:
 
 ```
-git@github.com:erges699/marigostraru-202404.git
+git@github.com:erges699/network-science-tsu-2024.git
 ```
 
 ### Создать и активировать виртуальное окружение, установить в него зависимости:
